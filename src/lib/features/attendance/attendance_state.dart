@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 abstract class AttendanceState extends Equatable {
   const AttendanceState();
@@ -71,6 +72,7 @@ class LateEmployee {
   final DateTime date;
   final TimeOfDay checkInTime;
   final TimeOfDay standardTime;
+  final int minutesLate;
 
   LateEmployee({
     required this.employeeId,
@@ -78,6 +80,7 @@ class LateEmployee {
     required this.date,
     required this.checkInTime,
     required this.standardTime,
+    required this.minutesLate,
   });
 
   @override
@@ -88,7 +91,8 @@ class LateEmployee {
         other.employeeName == employeeName &&
         other.date == date &&
         other.checkInTime == checkInTime &&
-        other.standardTime == standardTime;
+        other.standardTime == standardTime &&
+        other.minutesLate == minutesLate;
   }
 
   @override
@@ -97,6 +101,7 @@ class LateEmployee {
         employeeName.hashCode ^
         date.hashCode ^
         checkInTime.hashCode ^
-        standardTime.hashCode;
+        standardTime.hashCode ^
+        minutesLate.hashCode;
   }
 }

@@ -109,7 +109,9 @@ class AttendancePage extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            color: kcPrimaryColor,
+            decoration: const BoxDecoration(
+              gradient: kcPrimaryGradient,
+            ),
             child: const TabBar(
               indicatorColor: Colors.white,
               labelColor: Colors.white,
@@ -255,9 +257,20 @@ class AttendancePage extends StatelessWidget {
               lateEmployee.employeeName,
               style: bodyStyle(context),
             ),
-            subtitle: Text(
-              '${lateEmployee.date.day}/${lateEmployee.date.month}/${lateEmployee.date.year}',
-              style: bodySmallStyle(context),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${lateEmployee.date.day}/${lateEmployee.date.month}/${lateEmployee.date.year}',
+                  style: bodySmallStyle(context),
+                ),
+                Text(
+                  '${lateEmployee.minutesLate} minutes late',
+                  style: bodySmallStyle(context).copyWith(
+                    color: kcSecondaryColor,
+                  ),
+                ),
+              ],
             ),
             trailing: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

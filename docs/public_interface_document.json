@@ -1,7 +1,7 @@
 {
   "package_name": "com.walturn.my_app",
-  "project_description": "A Flutter application utilizing Bloc/Cubit architecture to create a modular mobile experience, focusing on attendance tracking. The app features a startup screen, dynamic data import from Excel files, and comprehensive state management for tracking employee attendance and late arrivals.",
-  "architecture_overview": "Implemented using Flutter Bloc/Cubit architecture pattern with clear separation of concerns. The application leverages Cubit classes for state management, using Equatable for efficient state comparisons. Key features include Excel data parsing, attendance tracking, and responsive UI components with flexible navigation.",
+  "project_description": "A Flutter mobile application designed for comprehensive employee attendance tracking. The app enables dynamic data import from Excel files, provides detailed insights into employee attendance patterns, and offers a modular architecture with robust state management. Key features include startup screen, attendance record parsing, late arrival identification, and a responsive user interface.",
+  "architecture_overview": "Implemented using Flutter Bloc/Cubit architecture with clear separation of concerns. The application leverages Cubit classes for state management, utilizing Equatable for efficient state comparisons. The architecture supports multiple environments (development and production), with centralized configuration management and responsive UI components.",
   "files": [
     {
       "name": "lib/app/app.dart",
@@ -419,28 +419,29 @@
     },
     {
       "name": "lib/features/attendance/attendance_state.dart",
-      "description": "Defines the state management classes for the attendance feature, representing different states of attendance data loading and display. This file provides the data structures for managing attendance records and late employee information in a Flutter application using the BLoC pattern.",
-      "class_diagram": "@startuml\nclass AttendanceState {\n  <<abstract>>\n}\n\nclass AttendanceInitial extends AttendanceState\nclass AttendanceLoading extends AttendanceState\nclass AttendanceLoaded extends AttendanceState {\n  +attendanceByDate: Map<DateTime, List<AttendanceRecord>>\n  +lateEmployees: List<LateEmployee>\n}\nclass AttendanceError extends AttendanceState {\n  +message: String\n}\n\nclass AttendanceRecord {\n  +employeeId: String\n  +employeeName: String\n  +date: DateTime\n  +checkInTime: TimeOfDay\n}\n\nclass LateEmployee {\n  +employeeId: String\n  +employeeName: String\n  +date: DateTime\n  +checkInTime: TimeOfDay\n  +standardTime: TimeOfDay\n}\n\nAttendanceState <|-- AttendanceInitial\nAttendanceState <|-- AttendanceLoading\nAttendanceState <|-- AttendanceLoaded\nAttendanceState <|-- AttendanceError\n@enduml",
+      "description": "This file defines the state management classes for the attendance feature using the BLoC pattern. It represents different states of the attendance system such as loading, loaded with data, and error states. The file also includes data models for attendance records and late employees to structure the attendance information.",
+      "class_diagram": "@startuml\nclass AttendanceState {\n  +List<Object?> props\n}\n\nclass AttendanceInitial\n\nclass AttendanceLoading\n\nclass AttendanceLoaded {\n  +Map<DateTime, List<AttendanceRecord>> attendanceByDate\n  +List<LateEmployee> lateEmployees\n}\n\nclass AttendanceError {\n  +String message\n}\n\nclass AttendanceRecord {\n  +String employeeId\n  +String employeeName\n  +DateTime date\n  +TimeOfDay checkInTime\n}\n\nclass LateEmployee {\n  +String employeeId\n  +String employeeName\n  +DateTime date\n  +TimeOfDay checkInTime\n  +TimeOfDay standardTime\n  +int minutesLate\n}\n\nAttendanceState <|-- AttendanceInitial\nAttendanceState <|-- AttendanceLoading\nAttendanceState <|-- AttendanceLoaded\nAttendanceState <|-- AttendanceError\n@enduml",
       "methods": [
         {
           "name": "props",
-          "description": "Provides Equatable properties for state comparison in Flutter BLoC pattern",
+          "description": "Returns list of properties for Equatable comparison",
           "parameters": null,
           "return_type": "List<Object?>"
         }
       ],
       "dependencies": [
-        "package:equatable/equatable.dart"
+        "package:equatable/equatable.dart",
+        "package:flutter/material.dart"
       ]
     },
     {
       "name": "lib/features/attendance/attendance_view.dart",
-      "description": "This file provides the user interface for the attendance tracking feature. It displays attendance records imported from Excel files, shows late arrival reports, and allows users to import new data. The view handles different states like loading, error, and loaded data through Bloc state management.",
-      "class_diagram": "@startuml\nclass AttendanceView {\n  +Widget build(BuildContext context)\n}\n\nclass AttendancePage {\n  +Widget build(BuildContext context)\n  -Widget _buildInitialView(BuildContext context)\n  -Widget _buildAttendanceView(BuildContext context, AttendanceLoaded state)\n  -Widget _buildAttendanceList(BuildContext context, Map<DateTime, List<AttendanceRecord>> attendanceByDate)\n  -Widget _buildLateList(BuildContext context, List<LateEmployee> lateEmployees)\n  -Widget _buildErrorView(BuildContext context, AttendanceError state)\n}\n\nAttendanceView --> AttendancePage : creates\nAttendancePage --> AttendanceCubit : uses\nAttendancePage --> AttendanceState : observes states\n@enduml",
+      "description": "This file contains the UI implementation for the attendance tracking feature. It provides a comprehensive view for importing, displaying, and analyzing employee attendance data from Excel files. The main purpose is to visualize attendance records, identify late arrivals, and provide actionable insights for HR management.",
+      "class_diagram": "@startuml\nclass AttendanceView {\n  +Widget build(BuildContext context)\n}\n\nclass AttendancePage {\n  +Widget build(BuildContext context)\n  -Widget _buildInitialView(BuildContext context)\n  -Widget _buildAttendanceView(BuildContext context, AttendanceLoaded state)\n  -Widget _buildAttendanceList(BuildContext context, Map<DateTime, List<AttendanceRecord>> attendanceByDate)\n  -Widget _buildLateList(BuildContext context, List<LateEmployee> lateEmployees)\n  -Widget _buildErrorView(BuildContext context, AttendanceError state)\n}\n\nAttendanceView --> AttendancePage : creates\nAttendancePage --> AttendanceCubit : uses\nAttendancePage --> AttendanceState : observes\n@enduml",
       "methods": [
         {
           "name": "build",
-          "description": "Main build method that sets up the attendance tracking UI with BlocProvider and Scaffold structure",
+          "description": "Main widget build method that constructs the attendance tracking interface with state management",
           "parameters": [
             "BuildContext context"
           ],
@@ -448,7 +449,7 @@
         },
         {
           "name": "_buildInitialView",
-          "description": "Creates the initial screen view with instructions and import options when no data is loaded",
+          "description": "Creates the initial landing screen prompting users to import Excel attendance data",
           "parameters": [
             "BuildContext context"
           ],
@@ -456,7 +457,7 @@
         },
         {
           "name": "_buildAttendanceView",
-          "description": "Builds the main attendance display with tab navigation between attendance records and late reports",
+          "description": "Builds the main attendance display interface with tabbed navigation between attendance records and late reports",
           "parameters": [
             "BuildContext context",
             "AttendanceLoaded state"
@@ -465,7 +466,7 @@
         },
         {
           "name": "_buildAttendanceList",
-          "description": "Displays attendance records grouped by date with visual indicators for punctuality",
+          "description": "Renders chronological attendance records with visual indicators for punctuality status",
           "parameters": [
             "BuildContext context",
             "Map<DateTime, List<AttendanceRecord>> attendanceByDate"
@@ -474,7 +475,7 @@
         },
         {
           "name": "_buildLateList",
-          "description": "Shows a list of employees who arrived late with their check-in times",
+          "description": "Displays a list of employees who arrived late with detailed timing information",
           "parameters": [
             "BuildContext context",
             "List<LateEmployee> lateEmployees"
@@ -483,7 +484,7 @@
         },
         {
           "name": "_buildErrorView",
-          "description": "Displays error messages and recovery options when data loading fails",
+          "description": "Shows error states with user-friendly messaging and recovery options when data loading fails",
           "parameters": [
             "BuildContext context",
             "AttendanceError state"
@@ -492,34 +493,34 @@
         }
       ],
       "dependencies": [
-        "package:flutter/material.dart",
-        "package:flutter_bloc/flutter_bloc.dart",
-        "package:my_app/features/attendance/attendance_cubit.dart",
-        "package:my_app/features/attendance/attendance_state.dart",
-        "package:my_app/shared/app_colors.dart",
-        "package:my_app/shared/text_style.dart"
+        "flutter/material.dart",
+        "flutter_bloc/flutter_bloc.dart",
+        "my_app/features/attendance/attendance_cubit.dart",
+        "my_app/features/attendance/attendance_state.dart",
+        "my_app/shared/app_colors.dart",
+        "my_app/shared/text_style.dart"
       ]
     },
     {
       "name": "lib/features/attendance/attendance_cubit.dart",
-      "description": "This file contains the AttendanceCubit, which is responsible for managing attendance data from Excel files. It handles parsing Excel data, identifying late arrivals, and managing the state of attendance information. The cubit integrates with Flutter BLoC for state management and uses the excel package for file parsing.",
-      "class_diagram": "@startuml\nclass AttendanceCubit {\n+TimeOfDay standardWorkTime\n+pickAndImportExcel()\n+loadSampleData()\n-_parseExcelData(Excel excel)\n-_parseDate(String dateStr)\n-_parseTime(String timeStr)\n-_identifyLateArrivals(Map<DateTime, List<AttendanceRecord>> attendanceByDate)\n}\n\nAttendanceCubit --> \"uses\" Excel : <<import>>\nAttendanceCubit --> \"uses\" FilePicker : <<import>>\n@enduml",
+      "description": "This file manages attendance data processing and state management for employee attendance tracking. It handles importing Excel attendance records, parsing various date/time formats, identifying late arrivals, and maintaining the application state for attendance information.",
+      "class_diagram": "@startuml\nclass AttendanceCubit {\n  +TimeOfDay standardWorkTime\n  +int lateThresholdMinutes\n  +pickAndImportExcel()\n  +loadSampleData()\n  -_parseExcelData()\n  -_parseDate()\n  -_parseTime()\n  -_identifyLateArrivals()\n}\n\nAttendanceCubit --> \"1\" AttendanceState\nAttendanceCubit --> FilePicker\nAttendanceCubit --> Excel\n@enduml",
       "methods": [
         {
           "name": "pickAndImportExcel",
-          "description": "Allows users to pick and import an Excel file containing attendance data. Parses the file and identifies late arrivals.",
-          "parameters": [],
+          "description": "Handles the file picking process and imports attendance data from Excel files, parsing the data and identifying late arrivals",
+          "parameters": null,
           "return_type": "Future<void>"
         },
         {
           "name": "loadSampleData",
-          "description": "Loads predefined sample attendance data for demonstration/testing purposes.",
-          "parameters": [],
+          "description": "Loads predefined sample attendance data for demonstration and testing purposes",
+          "parameters": null,
           "return_type": "void"
         },
         {
           "name": "_parseExcelData",
-          "description": "Parses Excel data into a structured format organized by date. Extracts employee information and check-in times.",
+          "description": "Parses Excel data into attendance records, handling different column formats and data validation",
           "parameters": [
             "Excel excel"
           ],
@@ -527,7 +528,7 @@
         },
         {
           "name": "_identifyLateArrivals",
-          "description": "Analyzes attendance records to identify employees who arrived after the standard work time.",
+          "description": "Analyzes attendance records to identify employees who arrived late based on configurable threshold",
           "parameters": [
             "Map<DateTime, List<AttendanceRecord>> attendanceByDate"
           ],
@@ -535,10 +536,12 @@
         }
       ],
       "dependencies": [
-        "flutter_bloc",
-        "file_picker",
-        "excel",
-        "my_app/features/attendance/attendance_state.dart"
+        "package:flutter_bloc/flutter_bloc.dart",
+        "package:file_picker/file_picker.dart",
+        "package:excel/excel.dart",
+        "package:my_app/features/attendance/attendance_state.dart",
+        "package:flutter/material.dart",
+        "package:intl/intl.dart"
       ]
     }
   ],
@@ -560,6 +563,6 @@
     }
   ],
   "sequence_diagram": "@startuml\nactor User\nparticipant App\nparticipant StartupView\nparticipant AttendanceView\nparticipant AttendanceCubit\nparticipant AttendanceState\n\nUser -> App: Launch App\nApp -> StartupView: Initialize\nStartupView -> AttendanceView: Navigate\nAttendanceView -> AttendanceCubit: Create Cubit\nUser -> AttendanceView: Import Excel\nAttendanceCubit -> AttendanceCubit: Parse Excel Data\nAttendanceCubit -> AttendanceState: Emit AttendanceLoaded\nAttendanceState -> AttendanceView: Update UI\n@enduml",
-  "state_management_flow": "State management is implemented using the Flutter Bloc/Cubit pattern with AttendanceCubit managing complex attendance data states. The cubit handles Excel file parsing, late arrival identification, and emits different states (Initial, Loading, Loaded, Error) using Equatable for efficient state comparisons. BlocBuilder enables reactive UI updates based on state changes.",
-  "navigation_flow": "Navigation uses standard Flutter navigation with Navigator, featuring an automatic transition from StartupView to AttendanceView. The navigation flow supports state-driven routing, with the ability to display different views based on the current AttendanceState, including initial view, loaded data view, and error handling screens."
+  "state_management_flow": "State management is implemented using the Flutter Bloc/Cubit pattern with AttendanceCubit managing complex attendance data states. The cubit handles Excel file parsing, late arrival identification, and emits different states (Initial, Loading, Loaded, Error) using Equatable for efficient state comparisons. BlocBuilder enables reactive UI updates based on state changes, providing a clean and predictable state transition mechanism.",
+  "navigation_flow": "Navigation uses standard Flutter navigation with Navigator, featuring an automatic transition from StartupView to AttendanceView. The navigation flow supports state-driven routing, with the ability to display different views based on the current AttendanceState, including initial view, loaded data view, and error handling screens. The app supports multi-flavor configurations for development and production environments."
 }

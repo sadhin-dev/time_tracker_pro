@@ -3,11 +3,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:excel/excel.dart';
 import 'package:my_app/features/attendance/attendance_state.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AttendanceCubit extends Cubit<AttendanceState> {
   AttendanceCubit() : super(AttendanceInitial());
 
   final TimeOfDay standardWorkTime = const TimeOfDay(hour: 9, minute: 0);
+  final int lateThresholdMinutes =
+      15; // Configurable late threshold (default 15 minutes)
 
   Future<void> pickAndImportExcel() async {
     emit(AttendanceLoading());
@@ -61,11 +64,11 @@ class AttendanceCubit extends Cubit<AttendanceState> {
         // Parse employee name (column 1)
         final employeeName = row[1]?.value?.toString() ?? '';
 
-        // Parse date (column 2) - assuming format: DD/MM/YYYY or similar
+        // Parse date (column 2) - supporting multiple formats
         final dateStr = row[2]?.value?.toString() ?? '';
         final date = _parseDate(dateStr);
 
-        // Parse check-in time (column 3) - assuming format: HH:MM
+        // Parse check-in time (column 3) - supporting multiple formats
         final timeStr = row[3]?.value?.toString() ?? '';
         final checkInTime = _parseTime(timeStr);
 
@@ -95,22 +98,23 @@ class AttendanceCubit extends Cubit<AttendanceState> {
   DateTime? _parseDate(String dateStr) {
     try {
       // Handle different date formats
-      if (dateStr.contains('/')) {
-        final parts = dateStr.split('/');
-        if (parts.length == 3) {
-          final day = int.parse(parts[0]);
-          final month = int.parse(parts[1]);
-          final year = int.parse(parts[2]);
-          return DateTime(year, month, day);
-        }
-      } else if (dateStr.contains('-')) {
-        final parts = dateStr.split('-');
-        if (parts.length == 3) {
-          // Assuming DD-MM-YYYY format
-          final day = int.parse(parts[0]);
-          final month = int.parse(parts[1]);
-          final year = int.parse(parts[2]);
-          return DateTime(year, month, day);
+      // Try DD/MM/YYYY, MM/DD/YYYY, YYYY-MM-DD formats
+      final formats = [
+        'dd/MM/yyyy',
+        'MM/dd/yyyy',
+        'yyyy-MM-dd',
+        'dd-MM-yyyy',
+        'MM-dd-yyyy',
+        'yyyy/MM/dd'
+      ];
+
+      for (final format in formats) {
+        try {
+          final date = DateFormat(format).parseStrict(dateStr);
+          return date;
+        } catch (e) {
+          // Try next format
+          continue;
         }
       }
     } catch (e) {
@@ -121,13 +125,16 @@ class AttendanceCubit extends Cubit<AttendanceState> {
 
   TimeOfDay? _parseTime(String timeStr) {
     try {
-      // Handle time format HH:MM
-      if (timeStr.contains(':')) {
-        final parts = timeStr.split(':');
-        if (parts.length == 2) {
-          final hour = int.parse(parts[0]);
-          final minute = int.parse(parts[1]);
-          return TimeOfDay(hour: hour, minute: minute);
+      // Handle time formats HH:MM, HH:MM:SS, H:MM, etc.
+      final formats = ['HH:mm', 'H:mm', 'HH:mm:ss', 'H:mm:ss'];
+
+      for (final format in formats) {
+        try {
+          final time = DateFormat(format).parseStrict(timeStr);
+          return TimeOfDay(hour: time.hour, minute: time.minute);
+        } catch (e) {
+          // Try next format
+          continue;
         }
       }
     } catch (e) {
@@ -142,16 +149,35 @@ class AttendanceCubit extends Cubit<AttendanceState> {
 
     for (final date in attendanceByDate.keys) {
       for (final record in attendanceByDate[date]!) {
-        // Check if employee arrived after standard work time
-        if (record.checkInTime.hour > standardWorkTime.hour ||
-            (record.checkInTime.hour == standardWorkTime.hour &&
-                record.checkInTime.minute > standardWorkTime.minute)) {
+        // Calculate minutes late
+        final standardDateTime = DateTime(
+          record.date.year,
+          record.date.month,
+          record.date.day,
+          standardWorkTime.hour,
+          standardWorkTime.minute,
+        );
+
+        final checkInDateTime = DateTime(
+          record.date.year,
+          record.date.month,
+          record.date.day,
+          record.checkInTime.hour,
+          record.checkInTime.minute,
+        );
+
+        final difference = checkInDateTime.difference(standardDateTime);
+        final minutesLate = difference.inMinutes;
+
+        // Check if employee arrived after standard work time + threshold
+        if (minutesLate > lateThresholdMinutes) {
           lateEmployees.add(LateEmployee(
             employeeId: record.employeeId,
             employeeName: record.employeeName,
             date: record.date,
             checkInTime: record.checkInTime,
             standardTime: standardWorkTime,
+            minutesLate: minutesLate,
           ));
         }
       }
