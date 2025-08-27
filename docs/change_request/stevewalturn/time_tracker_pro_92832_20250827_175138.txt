@@ -1,0 +1,35 @@
+I upload or import a excel file where include all employees attendance date time.
+Now Separate all employees attendance time with dates.
+And also want to identify which date which employees makes late.
+
+
+Previous AI Response Responding The Request:
+I'll help you implement an Excel attendance tracking feature with these key components:
+
+1. Excel File Parsing:
+- Use 'excel' package in Flutter for reading Excel files
+- Create a file picker to select Excel attendance records
+- Parse rows to extract employee ID, name, date, and check-in time
+
+2. Attendance Time Separation:
+- Create a data model `EmployeeAttendance` with fields:
+  * employeeId
+  * name
+  * date
+  * checkInTime
+- Group attendance records by date and employee
+- Store parsed data in a list of `EmployeeAttendance` objects
+
+3. Late Arrival Detection:
+- Define a standard 'on-time' threshold (e.g., 9:00 AM)
+- Add a boolean field `isLate` in `EmployeeAttendance`
+- Compare each employee's check-in time against the threshold
+- Automatically mark entries as late if beyond the threshold
+
+4. Reporting:
+- Create a view to display:
+  * Date-wise attendance
+  * List of late employees
+  * Late arrival count per employee
+
+Example implementation will use packages like 'file_picker' and 'excel' for robust file handling and parsing.

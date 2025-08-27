@@ -1,16 +1,16 @@
 {
   "package_name": "com.walturn.my_app",
-  "project_description": "A Flutter application built with Bloc/Cubit architecture to create a modular, maintainable mobile experience. The app features a startup screen for initialization, a home screen with counter functionality, and comprehensive state management. Key functionalities include flavor configuration (development and production), basic Bloc state management demonstrating core interaction patterns, and template components for rapid development.",
-  "architecture_overview": "Built using the Flutter Bloc/Cubit architecture pattern, the application separates concerns through dedicated Cubits for each feature. State management is handled via Cubit classes that emit immutable states using Equatable for efficient comparisons. The app utilizes simple Flutter navigation and demonstrates modern state management patterns with clear separation between UI and business logic.",
+  "project_description": "A Flutter application utilizing Bloc/Cubit architecture to create a modular mobile experience, focusing on attendance tracking. The app features a startup screen, dynamic data import from Excel files, and comprehensive state management for tracking employee attendance and late arrivals.",
+  "architecture_overview": "Implemented using Flutter Bloc/Cubit architecture pattern with clear separation of concerns. The application leverages Cubit classes for state management, using Equatable for efficient state comparisons. Key features include Excel data parsing, attendance tracking, and responsive UI components with flexible navigation.",
   "files": [
     {
       "name": "lib/app/app.dart",
-      "description": "Root application widget that configures MaterialApp with theme settings, dark theme support, and sets StartupView as the initial screen",
-      "class_diagram": "@startuml\nclass App {\n  +build(BuildContext context)\n}\n\nnote right of App: Configures MaterialApp,\\ntheme, and initial route\n@enduml",
+      "description": "Main application entry point that configures and initializes the Flutter app with theme settings and initial screen. This file serves as the root widget that bootstraps the entire application.",
+      "class_diagram": "@startuml\nclass App {\n  +Widget build(BuildContext context)\n}\nnote right: Main application widget that sets up\ntheme, routing, and initial screen\nApp --> MaterialApp : creates\nApp --> StartupView : navigates to\nApp --> ThemeData : configures\n@enduml",
       "methods": [
         {
           "name": "build",
-          "description": "Builds the root MaterialApp with theme configuration and initial route",
+          "description": "Constructs the main MaterialApp widget with theme configuration and sets the initial home screen",
           "parameters": [
             "BuildContext context"
           ],
@@ -18,31 +18,31 @@
         }
       ],
       "dependencies": [
-        "flutter/material.dart",
-        "my_app/features/startup/startup_view.dart",
-        "my_app/shared/app_colors.dart"
+        "package:flutter/material.dart",
+        "package:my_app/features/startup/startup_view.dart",
+        "package:my_app/shared/app_colors.dart"
       ]
     },
     {
       "name": "lib/features/home/home_cubit.dart",
-      "description": "⚠️ TEMPLATE: A template Cubit for the Home screen that demonstrates basic Bloc/Cubit pattern with state management. Contains counter functionality as an example. This file should be completely replaced with actual business logic specific to your app's home screen requirements.",
+      "description": "\u26a0\ufe0f TEMPLATE: A template Cubit for the Home screen that demonstrates basic Bloc/Cubit pattern with state management. Contains counter functionality as an example. This file should be completely replaced with actual business logic specific to your app's home screen requirements.",
       "class_diagram": "@startuml\nclass HomeCubit {\n  +incrementCounter()\n  +resetCounter()\n  -_loadInitialData()\n}\n@enduml",
       "methods": [
         {
           "name": "incrementCounter",
-          "description": "⚠️ TEMPLATE: Increments the counter state - replace with actual business logic",
+          "description": "\u26a0\ufe0f TEMPLATE: Increments the counter state - replace with actual business logic",
           "parameters": null,
           "return_type": "void"
         },
         {
           "name": "resetCounter",
-          "description": "⚠️ TEMPLATE: Resets the counter to zero - replace with actual business logic",
+          "description": "\u26a0\ufe0f TEMPLATE: Resets the counter to zero - replace with actual business logic",
           "parameters": null,
           "return_type": "void"
         },
         {
           "name": "_loadInitialData",
-          "description": "⚠️ TEMPLATE: Initializes the cubit with default state - replace with actual data loading",
+          "description": "\u26a0\ufe0f TEMPLATE: Initializes the cubit with default state - replace with actual data loading",
           "parameters": null,
           "return_type": "void"
         }
@@ -54,12 +54,12 @@
     },
     {
       "name": "lib/features/home/home_state.dart",
-      "description": "⚠️ TEMPLATE: State classes for the Home feature using Equatable for efficient state comparisons. Contains example states (HomeInitial, HomeLoaded) that should be replaced with actual state classes specific to your app's home screen needs.",
+      "description": "\u26a0\ufe0f TEMPLATE: State classes for the Home feature using Equatable for efficient state comparisons. Contains example states (HomeInitial, HomeLoaded) that should be replaced with actual state classes specific to your app's home screen needs.",
       "class_diagram": "@startuml\nabstract class HomeState {\n  +props: List<Object>\n}\nclass HomeInitial extends HomeState\nclass HomeLoaded extends HomeState {\n  +counter: int\n}\n@enduml",
       "methods": [
         {
           "name": "props",
-          "description": "⚠️ TEMPLATE: Equatable property for state comparison - adapt to your actual state properties",
+          "description": "\u26a0\ufe0f TEMPLATE: Equatable property for state comparison - adapt to your actual state properties",
           "parameters": null,
           "return_type": "List<Object>"
         }
@@ -70,12 +70,12 @@
     },
     {
       "name": "lib/features/home/home_view.dart",
-      "description": "⚠️ TEMPLATE: A template home screen view that demonstrates Bloc/Cubit UI patterns with BlocProvider and BlocBuilder. Uses a 'Chef's Kitchen' theme as example content. This entire file should be replaced with your actual home screen UI and functionality.",
-      "class_diagram": "@startuml\nclass HomeView {\n  +build(BuildContext context)\n}\n@enduml",
+      "description": "A placeholder UI view for the home screen that displays a warning message indicating it should not be accessible. This serves as a fallback or error state view when navigation to the home screen occurs incorrectly.",
+      "class_diagram": "@startuml\nclass HomeView {\n  +Widget build(BuildContext context)\n}\nnote right of HomeView\n  StatelessWidget\n  Purpose: Placeholder view showing inaccessible state\nend note\n@enduml",
       "methods": [
         {
           "name": "build",
-          "description": "⚠️ TEMPLATE: Builds the home screen UI with BlocProvider and BlocBuilder - replace with actual UI",
+          "description": "Constructs the UI widget tree for the home view, displaying a centered warning message",
           "parameters": [
             "BuildContext context"
           ],
@@ -83,43 +83,38 @@
         }
       ],
       "dependencies": [
-        "flutter/material.dart",
-        "flutter_bloc/flutter_bloc.dart",
-        "my_app/features/home/home_cubit.dart",
-        "my_app/features/home/home_state.dart",
-        "my_app/shared/app_colors.dart"
+        "package:flutter/material.dart"
       ]
     },
     {
       "name": "lib/features/startup/startup_view.dart",
-      "description": "⚠️ TEMPLATE: A template startup/splash screen that demonstrates basic Flutter navigation patterns. Uses a 'Chef's Kitchen' theme as example content. This file should be replaced with your actual startup screen design and initialization logic.",
-      "class_diagram": "@startuml\nclass StartupView {\n  +createState()\n}\nclass _StartupViewState {\n  +initState()\n  +build(BuildContext context)\n  -_navigateToHome()\n}\n@enduml",
+      "description": "This file contains the StartupView widget which serves as the application's splash screen and initial routing mechanism. It displays a branded loading screen for 1 second before automatically navigating to the main attendance tracking feature.",
+      "class_diagram": "@startuml\nclass StartupView {\n  +State<StartupView> createState()\n}\n\nclass _StartupViewState {\n  -void _navigateToAttendance()\n  +Widget build(BuildContext context)\n}\n\nStartupView -- _StartupViewState\nclass AttendanceView\n_StartupViewState ..> AttendanceView : navigates to\n@enduml",
       "methods": [
         {
-          "name": "initState",
-          "description": "⚠️ TEMPLATE: Initializes the startup sequence - replace with actual startup logic",
+          "name": "createState",
+          "description": "Creates the state object for the StartupView widget",
+          "parameters": null,
+          "return_type": "State<StartupView>"
+        },
+        {
+          "name": "_navigateToAttendance",
+          "description": "Handles automatic navigation from splash screen to attendance view after a 1-second delay",
           "parameters": null,
           "return_type": "void"
         },
         {
           "name": "build",
-          "description": "⚠️ TEMPLATE: Builds the splash screen UI - replace with actual startup screen design",
+          "description": "Builds the UI for the splash screen with branding and loading indicator",
           "parameters": [
             "BuildContext context"
           ],
           "return_type": "Widget"
-        },
-        {
-          "name": "_navigateToHome",
-          "description": "⚠️ TEMPLATE: Handles navigation to home screen - replace with actual startup tasks and navigation logic",
-          "parameters": null,
-          "return_type": "Future<void>"
         }
       ],
       "dependencies": [
-        "flutter/material.dart",
-        "my_app/features/home/home_view.dart",
-        "my_app/shared/app_colors.dart"
+        "package:flutter/material.dart",
+        "package:my_app/features/attendance/attendance_view.dart"
       ]
     },
     {
@@ -289,18 +284,93 @@
     },
     {
       "name": "lib/shared/text_style.dart",
-      "description": "A typography configuration file that defines a systematic set of text styles for various UI components, providing consistent and responsive typography across the application.",
-      "class_diagram": "@startuml\nclass TextStyles {\n  + {static} heading1Style\n  + {static} bodyStyle\n  + {static} buttonStyle\n}\n@enduml",
+      "description": "This file defines a centralized set of text styles used throughout the application. It provides consistent typography by encapsulating font sizes, weights, colors and other text properties in reusable functions. This ensures uniform text appearance across different screens and components while making it easy to update styles globally.",
+      "class_diagram": "classDiagram\n    class TextStyles {\n        +heading1Style(context) TextStyle\n        +heading2Style(context) TextStyle\n        +heading3Style(context) TextStyle\n        +bodyStyle(context) TextStyle\n        +bodySmallStyle(context) TextStyle\n        +buttonStyle(context) TextStyle\n        +linkStyle(context) TextStyle\n        +errorStyle(context) TextStyle\n        +successStyle(context) TextStyle\n        +subtitleStyle(context) TextStyle\n    }\n\n    class AppColors {\n        <<dependency>>\n    }\n\n    TextStyles --> AppColors : uses\n",
       "methods": [
         {
-          "name": "N/A",
-          "description": "Constants file with predefined text style definitions",
-          "parameters": null,
-          "return_type": null
+          "name": "heading1Style",
+          "description": "Returns the largest heading text style with bold weight and primary text color",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "TextStyle"
+        },
+        {
+          "name": "heading2Style",
+          "description": "Returns a medium heading text style with semi-bold weight and primary text color",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "TextStyle"
+        },
+        {
+          "name": "heading3Style",
+          "description": "Returns a smaller heading text style with semi-bold weight and primary text color",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "TextStyle"
+        },
+        {
+          "name": "bodyStyle",
+          "description": "Returns the standard body text style with regular weight and primary text color",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "TextStyle"
+        },
+        {
+          "name": "bodySmallStyle",
+          "description": "Returns a smaller body text style with regular weight and secondary text color",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "TextStyle"
+        },
+        {
+          "name": "buttonStyle",
+          "description": "Returns the standard button text style with medium bold weight and white color",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "TextStyle"
+        },
+        {
+          "name": "linkStyle",
+          "description": "Returns a link text style with underlined decoration in primary color",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "TextStyle"
+        },
+        {
+          "name": "errorStyle",
+          "description": "Returns an error message text style with error color",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "TextStyle"
+        },
+        {
+          "name": "successStyle",
+          "description": "Returns a success message text style with success color",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "TextStyle"
+        },
+        {
+          "name": "subtitleStyle",
+          "description": "Legacy alias for bodySmallStyle - returns smaller body text style",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "TextStyle"
         }
       ],
       "dependencies": [
-        "flutter/material.dart"
+        "package:flutter/material.dart",
+        "package:my_app/shared/app_colors.dart"
       ]
     },
     {
@@ -331,7 +401,7 @@
     },
     {
       "name": "lib/services/firebase_auth_service.dart",
-      "description": "⚠️ TEMPLATE: Commented template for Firebase Authentication service. This file is entirely commented out and should only be uncommented when Firebase Authentication is needed in the project. Contains template authentication methods and setup instructions.",
+      "description": "\u26a0\ufe0f TEMPLATE: Commented template for Firebase Authentication service. This file is entirely commented out and should only be uncommented when Firebase Authentication is needed in the project. Contains template authentication methods and setup instructions.",
       "class_diagram": "@startuml\nnote as N1\n  File is completely commented out\n  Uncomment when Firebase Auth is needed\nend note\n@enduml",
       "methods": [],
       "dependencies": [
@@ -340,11 +410,135 @@
     },
     {
       "name": "lib/services/firestore_service.dart",
-      "description": "⚠️ TEMPLATE: Commented template for Firestore database service. This file is entirely commented out and should only be uncommented when Firestore database functionality is needed in the project. Contains template CRUD operations and setup instructions.",
+      "description": "\u26a0\ufe0f TEMPLATE: Commented template for Firestore database service. This file is entirely commented out and should only be uncommented when Firestore database functionality is needed in the project. Contains template CRUD operations and setup instructions.",
       "class_diagram": "@startuml\nnote as N1\n  File is completely commented out\n  Uncomment when Firestore is needed\nend note\n@enduml",
       "methods": [],
       "dependencies": [
         "cloud_firestore/cloud_firestore.dart (commented)"
+      ]
+    },
+    {
+      "name": "lib/features/attendance/attendance_state.dart",
+      "description": "Defines the state management classes for the attendance feature, representing different states of attendance data loading and display. This file provides the data structures for managing attendance records and late employee information in a Flutter application using the BLoC pattern.",
+      "class_diagram": "@startuml\nclass AttendanceState {\n  <<abstract>>\n}\n\nclass AttendanceInitial extends AttendanceState\nclass AttendanceLoading extends AttendanceState\nclass AttendanceLoaded extends AttendanceState {\n  +attendanceByDate: Map<DateTime, List<AttendanceRecord>>\n  +lateEmployees: List<LateEmployee>\n}\nclass AttendanceError extends AttendanceState {\n  +message: String\n}\n\nclass AttendanceRecord {\n  +employeeId: String\n  +employeeName: String\n  +date: DateTime\n  +checkInTime: TimeOfDay\n}\n\nclass LateEmployee {\n  +employeeId: String\n  +employeeName: String\n  +date: DateTime\n  +checkInTime: TimeOfDay\n  +standardTime: TimeOfDay\n}\n\nAttendanceState <|-- AttendanceInitial\nAttendanceState <|-- AttendanceLoading\nAttendanceState <|-- AttendanceLoaded\nAttendanceState <|-- AttendanceError\n@enduml",
+      "methods": [
+        {
+          "name": "props",
+          "description": "Provides Equatable properties for state comparison in Flutter BLoC pattern",
+          "parameters": null,
+          "return_type": "List<Object?>"
+        }
+      ],
+      "dependencies": [
+        "package:equatable/equatable.dart"
+      ]
+    },
+    {
+      "name": "lib/features/attendance/attendance_view.dart",
+      "description": "This file provides the user interface for the attendance tracking feature. It displays attendance records imported from Excel files, shows late arrival reports, and allows users to import new data. The view handles different states like loading, error, and loaded data through Bloc state management.",
+      "class_diagram": "@startuml\nclass AttendanceView {\n  +Widget build(BuildContext context)\n}\n\nclass AttendancePage {\n  +Widget build(BuildContext context)\n  -Widget _buildInitialView(BuildContext context)\n  -Widget _buildAttendanceView(BuildContext context, AttendanceLoaded state)\n  -Widget _buildAttendanceList(BuildContext context, Map<DateTime, List<AttendanceRecord>> attendanceByDate)\n  -Widget _buildLateList(BuildContext context, List<LateEmployee> lateEmployees)\n  -Widget _buildErrorView(BuildContext context, AttendanceError state)\n}\n\nAttendanceView --> AttendancePage : creates\nAttendancePage --> AttendanceCubit : uses\nAttendancePage --> AttendanceState : observes states\n@enduml",
+      "methods": [
+        {
+          "name": "build",
+          "description": "Main build method that sets up the attendance tracking UI with BlocProvider and Scaffold structure",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "Widget"
+        },
+        {
+          "name": "_buildInitialView",
+          "description": "Creates the initial screen view with instructions and import options when no data is loaded",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "Widget"
+        },
+        {
+          "name": "_buildAttendanceView",
+          "description": "Builds the main attendance display with tab navigation between attendance records and late reports",
+          "parameters": [
+            "BuildContext context",
+            "AttendanceLoaded state"
+          ],
+          "return_type": "Widget"
+        },
+        {
+          "name": "_buildAttendanceList",
+          "description": "Displays attendance records grouped by date with visual indicators for punctuality",
+          "parameters": [
+            "BuildContext context",
+            "Map<DateTime, List<AttendanceRecord>> attendanceByDate"
+          ],
+          "return_type": "Widget"
+        },
+        {
+          "name": "_buildLateList",
+          "description": "Shows a list of employees who arrived late with their check-in times",
+          "parameters": [
+            "BuildContext context",
+            "List<LateEmployee> lateEmployees"
+          ],
+          "return_type": "Widget"
+        },
+        {
+          "name": "_buildErrorView",
+          "description": "Displays error messages and recovery options when data loading fails",
+          "parameters": [
+            "BuildContext context",
+            "AttendanceError state"
+          ],
+          "return_type": "Widget"
+        }
+      ],
+      "dependencies": [
+        "package:flutter/material.dart",
+        "package:flutter_bloc/flutter_bloc.dart",
+        "package:my_app/features/attendance/attendance_cubit.dart",
+        "package:my_app/features/attendance/attendance_state.dart",
+        "package:my_app/shared/app_colors.dart",
+        "package:my_app/shared/text_style.dart"
+      ]
+    },
+    {
+      "name": "lib/features/attendance/attendance_cubit.dart",
+      "description": "This file contains the AttendanceCubit, which is responsible for managing attendance data from Excel files. It handles parsing Excel data, identifying late arrivals, and managing the state of attendance information. The cubit integrates with Flutter BLoC for state management and uses the excel package for file parsing.",
+      "class_diagram": "@startuml\nclass AttendanceCubit {\n+TimeOfDay standardWorkTime\n+pickAndImportExcel()\n+loadSampleData()\n-_parseExcelData(Excel excel)\n-_parseDate(String dateStr)\n-_parseTime(String timeStr)\n-_identifyLateArrivals(Map<DateTime, List<AttendanceRecord>> attendanceByDate)\n}\n\nAttendanceCubit --> \"uses\" Excel : <<import>>\nAttendanceCubit --> \"uses\" FilePicker : <<import>>\n@enduml",
+      "methods": [
+        {
+          "name": "pickAndImportExcel",
+          "description": "Allows users to pick and import an Excel file containing attendance data. Parses the file and identifies late arrivals.",
+          "parameters": [],
+          "return_type": "Future<void>"
+        },
+        {
+          "name": "loadSampleData",
+          "description": "Loads predefined sample attendance data for demonstration/testing purposes.",
+          "parameters": [],
+          "return_type": "void"
+        },
+        {
+          "name": "_parseExcelData",
+          "description": "Parses Excel data into a structured format organized by date. Extracts employee information and check-in times.",
+          "parameters": [
+            "Excel excel"
+          ],
+          "return_type": "Map<DateTime, List<AttendanceRecord>>"
+        },
+        {
+          "name": "_identifyLateArrivals",
+          "description": "Analyzes attendance records to identify employees who arrived after the standard work time.",
+          "parameters": [
+            "Map<DateTime, List<AttendanceRecord>> attendanceByDate"
+          ],
+          "return_type": "List<LateEmployee>"
+        }
+      ],
+      "dependencies": [
+        "flutter_bloc",
+        "file_picker",
+        "excel",
+        "my_app/features/attendance/attendance_state.dart"
       ]
     }
   ],
@@ -365,7 +559,7 @@
       "purpose": "Efficient state comparison for Bloc states"
     }
   ],
-  "sequence_diagram": "@startuml\nactor User\nparticipant App\nparticipant StartupView\nparticipant HomeView\nparticipant HomeCubit\nparticipant HomeState\n\nUser -> App: Launch App\nApp -> StartupView: Initialize\nStartupView -> StartupView: Wait 2 seconds\nStartupView -> HomeView: Navigate\nHomeView -> HomeCubit: Create Cubit\nHomeCubit -> HomeState: Emit HomeLoaded\nUser -> HomeView: Interact\nUser -> HomeCubit: Increment Counter\nHomeCubit -> HomeState: Emit New State\nHomeState -> HomeView: Update UI\n@enduml",
-  "state_management_flow": "State management is implemented using the Flutter Bloc/Cubit pattern. The HomeCubit extends Cubit<HomeState> and manages state through emit() calls. States are immutable classes that extend Equatable for efficient comparisons. The UI uses BlocBuilder to rebuild when state changes occur. This pattern provides clear separation between business logic (Cubit) and UI (View), with reactive state updates.",
-  "navigation_flow": "Navigation uses standard Flutter navigation with Navigator.pushReplacement. The StartupView automatically navigates to HomeView after a 2-second delay. This simple navigation approach is suitable for basic apps but can be enhanced with more sophisticated routing solutions as the app grows."
+  "sequence_diagram": "@startuml\nactor User\nparticipant App\nparticipant StartupView\nparticipant AttendanceView\nparticipant AttendanceCubit\nparticipant AttendanceState\n\nUser -> App: Launch App\nApp -> StartupView: Initialize\nStartupView -> AttendanceView: Navigate\nAttendanceView -> AttendanceCubit: Create Cubit\nUser -> AttendanceView: Import Excel\nAttendanceCubit -> AttendanceCubit: Parse Excel Data\nAttendanceCubit -> AttendanceState: Emit AttendanceLoaded\nAttendanceState -> AttendanceView: Update UI\n@enduml",
+  "state_management_flow": "State management is implemented using the Flutter Bloc/Cubit pattern with AttendanceCubit managing complex attendance data states. The cubit handles Excel file parsing, late arrival identification, and emits different states (Initial, Loading, Loaded, Error) using Equatable for efficient state comparisons. BlocBuilder enables reactive UI updates based on state changes.",
+  "navigation_flow": "Navigation uses standard Flutter navigation with Navigator, featuring an automatic transition from StartupView to AttendanceView. The navigation flow supports state-driven routing, with the ability to display different views based on the current AttendanceState, including initial view, loaded data view, and error handling screens."
 }
